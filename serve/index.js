@@ -26,7 +26,7 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '88888',
-    database: 'login',
+    database: 'user_list',
     multipleStatements: true // 支持执行多条 sql 语句
 })
 db.connect((err) => {
@@ -36,7 +36,7 @@ db.connect((err) => {
 app.post('/addUser', (req, res) => { //用户新增
     console.log(req.body)
     let data = req.body;
-    let sql = `insert into login_list(id,time,name,sex,age) values("${data.id}",'2018-10-10',"${data.name}","${data.sex}","${data.age}");
+    let sql = `insert into login_list(id,name,sex,age) values("${data.id}","${data.name}","${data.sex}","${data.age}");
     select * from login_list where id="${data.id}"`;
     db.query(sql, (err, results) => {
         if (err) {

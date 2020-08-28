@@ -240,20 +240,26 @@ export default {
       this.pageNum = val;
       this.getList();
     },
-    getSearch(){
+    getSearch() {
       this.$http({
-        url:'/searchUser',
-        method:'post',
-        data:{
-          name:this.inputVal
+        url: "/searchUser",
+        method: "post",
+        data: {
+          name: this.inputVal,
+        },
+      }).then((res) => {
+        if (res.data.code == 200) {
+          if (res.data.data.length == 0) {
+            this.$message({
+              message: `姓名为${this.inputVal}的用户不存在`,
+              type: "warning",
+            });
+          } else {
+            this.list = res.data.data;
+          }
         }
-      }).then(res=>{
-        debugger
-        if(res.data.code==200){
-          this.list=res.data.data;
-        }
-      })
-    }
+      });
+    },
   },
 };
 </script>
