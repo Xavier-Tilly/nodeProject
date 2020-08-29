@@ -22,26 +22,50 @@ app.all('*', function (req, res, next) {
 app.listen(3000, () => {
     console.log("服务器开启在3000端口。。。");
 })
-const db = mysql.createConnection({
+// const db = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: '88888',
+//     database: 'login',
+//     multipleStatements: true // 支持执行多条 sql 语句
+// })
+// db.connect((err) => {
+//     if (err) throw err;
+//     console.log('连接成功')
+// })
+//创建连接池
+const db = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '88888',
-    database: 'user_list',
+    database: 'login',
+    connectionLimit: 5, //
     multipleStatements: true // 支持执行多条 sql 语句
-})
-db.connect((err) => {
-    if (err) throw err;
-    console.log('连接成功')
+});
+db.getConnection((err, conn) => {
+    if (err) {
+        console.log('mysql数据库连接失败');
+    } else {
+        console.log('数据库连接成功(连接池)');
+        let sql = `select * from user_list`;
+        conn.query(sql, (err2, res) => {
+            if (err2) {
+                console.log('查询数据库失败')
+            } else {
+                conn.release();
+            }
+        })
+    }
 })
 app.post('/addUser', (req, res) => { //用户新增
     console.log(req.body)
     let data = req.body;
-    let sql = `insert into login_list(id,name,sex,age) values("${data.id}","${data.name}","${data.sex}","${data.age}");
-    select * from login_list where id="${data.id}"`;
+    let sql = `insert into user_list(id,name,sex,age) values("${data.id}","${data.name}","${data.sex}","${data.age}");
+    select * from user_list where id="${data.id}"`;
     db.query(sql, (err, results) => {
         if (err) {
             console.log(data.id)
-            if(data.id!=""&&data.id!=undefined){
+            if (data.id != "" && data.id != undefined) {
                 return res.json({
                     code: 1,
                     msg: "已存在的编号"
@@ -53,14 +77,14 @@ app.post('/addUser', (req, res) => { //用户新增
             //         msg: '编号不能为空'
             //     })
             // }
-           
-        }else{
+
+        } else {
             res.json({
-            code: 200,
-            msg: '添加成功'
-        })
+                code: 200,
+                msg: '添加成功'
+            })
         }
-        
+
     })
 })
 
@@ -69,7 +93,7 @@ app.post("/userList", (req, res) => { //查询列表
     let data = req.body;
     let pageNum = (data.pageNum - 1) * data.pageSize;
     let pageSize = data.pageSize;
-    let sql = `select id,name,sex,age,DATE_FORMAT(time,'%Y-%c-%d %h:%i:%s') as date from login_list limit ${pageNum},${pageSize};select count(0) as count from login_list`
+    let sql = `select id,name,sex,age,DATE_FORMAT(time,'%Y-%c-%d %h:%i:%s') as date from user_list limit ${pageNum},${pageSize};select count(0) as count from user_list`
     // let sqlLimit="";
     db.query(sql, (err, result) => {
         if (err) {
@@ -87,10 +111,10 @@ app.post("/userList", (req, res) => { //查询列表
         }
     })
 })
-app.post('/updateList', (req, res) => {//修改接口
+app.post('/updateList', (req, res) => { //修改接口
     console.log(req.body)
     let data = req.body;
-    let sql = `update login_list set name="${data.name}",sex="${data.sex}",age="${data.age}" where id="${data.id}"`
+    let sql = `update user_list set name="${data.name}",sex="${data.sex}",age="${data.age}" where id="${data.id}"`
     db.query(sql, (err, result) => {
         if (err) {
             console.log(err)
@@ -99,40 +123,53 @@ app.post('/updateList', (req, res) => {//修改接口
             res.json({
                 code: 200,
                 msg: '修改成功！',
-                id:data.id
+                id: data.id
             })
         }
     })
 })
-app.delete("/deleteUser",(req,res)=>{//删除
+app.delete("/deleteUser", (req, res) => { //删除
     console.log(req.body)
-    let data=req.body
-    let sql=`delete from login_list where id="${data.id}" `
-    db.query(sql,(err,result)=>{
-        if(err){
+    let data = req.body
+    let sql = `delete from user_list where id="${data.id}" `
+    db.query(sql, (err, result) => {
+        if (err) {
             console.log(err)
-        }else{
+        } else {
             console.log(result)
             res.json({
-                code:200,
-                msg:'删除成功',
-                id:data.id
+                code: 200,
+                msg: '删除成功',
+                id: data.id
             })
         }
     })
 })
-app.post('/searchUser',(req,res)=>{
+app.post('/searchUser', (req, res) => {
     console.log(req);
-    let data=req.body;
-    let sql=`select * from login_list where name like "%${data.name}%"`;
-    db.query(sql,(err,result)=>{
-        if(err){
+    let data = req.body;
+    let sql = `select * from user_list where name like "%${data.name}%"`;
+    db.query(sql, (err, result) => {
+        if (err) {
             console.log(err)
-        }else{
+        } else {
             res.json({
-                data:result,
-                code:200,
+                data: result,
+                code: 200,
             })
         }
     })
+})
+app.get('/chartsList',(req,res)=>{
+let sql=`select name,age from user_list limit 10`;
+db.query(sql,(err,data)=>{
+    if(err){
+        console.log(err)
+    }else{
+        res.json({
+            data:data,
+            code:200
+        })
+    }
+})
 })

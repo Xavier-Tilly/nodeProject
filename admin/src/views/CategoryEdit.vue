@@ -39,6 +39,21 @@ export default {
         });
         return false;
       }
+      if (this.age != "") {
+        if (parseFloat(this.age).toString() == "NaN") {
+          this.$message({
+            message: "请输入数字",
+            type: "error",
+          });
+          return false
+        }
+      }else{
+           this.$message({
+            message: "年龄不能为空",
+            type: "error",
+          });
+          return false
+      }
       this.$http({
         method: "post",
         url: "/addUser",

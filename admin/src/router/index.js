@@ -9,6 +9,7 @@ Vue.use(VueRouter)
     path: '/',
     name: 'Main',
     component: Main,
+    redirect:'/categoryEdit',
     children:[{
       path:'/categoryEdit',
       name:'categoryEdit',
@@ -18,6 +19,11 @@ Vue.use(VueRouter)
       path:'/categoryList',
       name:'categoryList',
       component:()=>import('../views/CategoryList.vue')
+    },
+    {
+      path:'/charts',
+      name:'charts',
+      component:()=>import('../views/Charts.vue')
     }
   ]
   },

@@ -3,6 +3,11 @@ import App from './App.vue'
 import './plugins/element.js'
 import router from './router'
 import VueRouter from 'vue-router'
+
+
+import VeLine from 'v-charts/lib/line.common'
+Vue.component(VeLine.name,VeLine)
+
 Vue.config.productionTip = false
 import http from './http'
 Vue.prototype.$http=http
