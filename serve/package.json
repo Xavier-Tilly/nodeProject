@@ -16,6 +16,7 @@
     "mysql": "^2.18.1"
   },
   "dependencies": {
-    "depd": "^2.0.0"
+    "depd": "^2.0.0",
+    "multer": "^1.4.2"
   }
 }

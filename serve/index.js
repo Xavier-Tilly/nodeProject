@@ -1,12 +1,27 @@
 const express = require('express');
 const app = express()
 const mysql = require("mysql");
+const multer=require('multer');
 const bodyParser = require('body-parser'); //当客户端的请求为post请求时需要通过它去解析客户端传过来的数据
 
+var storage=multer.diskStorage({
+    destination:function(req,file,cb){
+        console.log(req)
+        console.log(file)
+        console.log(cb)
+        cb(null,'./uploads')
+    },
+    filename:function(req,file,cb){
+        cb(null,`${Date.now()}-${file.originalname}`)
+    }
+})
+var upload=multer({storage:storage});
+var imgBaseUrl='../'
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 })); //中间层对post请求的req进行解析
+app.use(express.static('public'));
 
 app.all('*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); //   http://www.yueyanshaosun.cn,http://www.baidu.com,www,...
@@ -19,8 +34,9 @@ app.all('*', function (req, res, next) {
     next();
 });
 
-app.listen(3000, () => {
-    console.log("服务器开启在3000端口。。。");
+//这个是服务端口
+app.listen(8081, () => {
+    console.log("服务器开启在8081端口。。。");
 })
 // const db = mysql.createConnection({
 //     host: 'localhost',
@@ -29,20 +45,30 @@ app.listen(3000, () => {
 //     database: 'login',
 //     multipleStatements: true // 支持执行多条 sql 语句
 // })
+//你这个服务端口是多少
 // db.connect((err) => {
 //     if (err) throw err;
 //     console.log('连接成功')
 // })
 //创建连接池
 const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '88888',
+    host: '49.235.105.91',
+    //这个是数据库端口
+    port: '3306',
+    user: 'login',
+    password: 'mmEkLA8d8kpDXfDA',
     database: 'login',
     connectionLimit: 5, //
     multipleStatements: true // 支持执行多条 sql 语句
+    // host: 'localhost',
+    // user: 'root',
+    // password: '88888',
+    // database: 'login',
+    // connectionLimit: 5, //s
+    // multipleStatements: true // 支持执行多条 sql 语句
 });
 db.getConnection((err, conn) => {
+
     if (err) {
         console.log('mysql数据库连接失败');
     } else {
@@ -56,6 +82,23 @@ db.getConnection((err, conn) => {
             }
         })
     }
+})
+app.post('/upload/img',upload.array('images',2),function(req,res){
+    var files=req;
+    console.log(files);
+    console.log(req)
+    var result={};
+    if(!files[0]){
+        result.code=1;
+        result.errMsg='上传失败'
+    }else{
+        result.code=0;
+        result.data={
+            url:files[0].path
+        }
+        result.errMsg='上传成功'
+    }
+    res.end(JSON.stringify(result));
 })
 app.post('/addUser', (req, res) => { //用户新增
     console.log(req.body)
@@ -160,16 +203,16 @@ app.post('/searchUser', (req, res) => {
         }
     })
 })
-app.get('/chartsList',(req,res)=>{
-let sql=`select name,age from user_list limit 10`;
-db.query(sql,(err,data)=>{
-    if(err){
-        console.log(err)
-    }else{
-        res.json({
-            data:data,
-            code:200
-        })
-    }
-})
+app.get('/chartsList', (req, res) => {
+    let sql = `select name,age from user_list limit 10`;
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.json({
+                data: data,
+                code: 200
+            })
+        }
+    })
 })

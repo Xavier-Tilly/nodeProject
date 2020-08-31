@@ -10,9 +10,12 @@
         </el-menu-item-group>
       </el-submenu>
         <el-submenu index="2">
-        <template slot="title"><i class="el-icon-message"></i>可视图形</template>
+        <template slot="title"><i class="el-icon-message"></i>数据可视化</template>
         <el-menu-item-group>
           <el-menu-item @click="toCharts" index="2-1">年龄图</el-menu-item>
+        </el-menu-item-group>
+        <el-menu-item-group>
+          <el-menu-item @click="toPicture" index="2-2">图库</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
@@ -53,7 +56,7 @@
 <script>
   export default {
     data() {
-     
+     return{}
     },
     methods:{
         toPage(){
@@ -64,6 +67,9 @@
         },
         toCharts(){
           this.$router.push('/charts')
+        },
+        toPicture(){
+          this.$router.push('/picture')
         }
     }
   };

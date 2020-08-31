@@ -24,6 +24,11 @@ Vue.use(VueRouter)
       path:'/charts',
       name:'charts',
       component:()=>import('../views/Charts.vue')
+    },
+    {
+      path:'/picture',
+      name:'picture',
+      component:()=>import('../views/Picture.vue')
     }
   ]
   },
