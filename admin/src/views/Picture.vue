@@ -4,6 +4,7 @@
    <el-upload
   action="http://192.168.3.6:8081/upload/img"
   list-type="picture-card"
+  name='images'
   :on-preview="handlePictureCardPreview"
   :on-remove="handleRemove">
   <i class="el-icon-plus"></i>
