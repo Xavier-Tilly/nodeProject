@@ -6,17 +6,13 @@ const bodyParser = require('body-parser'); //当客户端的请求为post请求�
 
 var storage=multer.diskStorage({
     destination:function(req,file,cb){
-        console.log(req)
-        console.log(file)
-        console.log(cb)
-        cb(null,'./uploads')
+        cb(null,'D:/images/')
     },
     filename:function(req,file,cb){
         cb(null,`${Date.now()}-${file.originalname}`)
     }
 })
 var upload=multer({storage:storage});
-var imgBaseUrl='../'
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -68,7 +64,6 @@ const db = mysql.createPool({
     // multipleStatements: true // 支持执行多条 sql 语句
 });
 db.getConnection((err, conn) => {
-
     if (err) {
         console.log('mysql数据库连接失败');
     } else {
@@ -84,30 +79,68 @@ db.getConnection((err, conn) => {
     }
 })
 app.post('/upload/img',upload.array('images',2),function(req,res){
-    var files=req;
-    console.log(files);
-    console.log(req)
-    var result={};
-    if(!files[0]){
-        result.code=1;
-        result.errMsg='上传失败'
-    }else{
-        result.code=0;
-        result.data={
-            url:files[0].path
+   //因为在 app.js文件里面我们已经向外暴漏了存储图片的文件夹
+   let url='http://localhost:7221/';
+   var data =req.files 
+   let sql=`insert into images_list(url,name) values('${url}${data[0].filename}','${data[0].originalname}');select * from images_list`
+   db.query(sql,(err,result)=>{
+       if(err){
+        return res.json({
+            code: 1,
+            msg: "上传失败"
+        })
+       }else{
+        res.json({
+            url:  `${url}${data[0].filename}`,
+            data:data[0],
+            code:200,
+            msg:'上传成功',
+            imgList:result[1]
+         })
+       }
+   })
+})
+app.post('/picture/list',(req,res)=>{//获取图片列表
+    let sql='select * from images_list';
+    db.query(sql,(err,result)=>{
+        if(err){
+            return res.json({
+                code:1,
+                msg:'获取列表失败'
+            })
+        }else{
+            res.json({
+                code:200,
+                data:result,
+                msg:'成功'
+            })
         }
-        result.errMsg='上传成功'
-    }
-    res.end(JSON.stringify(result));
+    })
+})
+app.delete('/delete/imgList',(req,res)=>{
+    let data=req.body;
+    console.log(data)
+    let sql=`delete from images_list where id=${data.id}`;
+    db.query(sql,(err,result)=>{
+        if(err){
+            res.json({
+                code:1,
+                msg:'删除失败'
+            })
+        }else{
+            res.json({
+                code:200,
+                msg:'删除成功'
+            })
+        }
+    })
 })
 app.post('/addUser', (req, res) => { //用户新增
-    console.log(req.body)
     let data = req.body;
     let sql = `insert into user_list(id,name,sex,age) values("${data.id}","${data.name}","${data.sex}","${data.age}");
     select * from user_list where id="${data.id}"`;
     db.query(sql, (err, results) => {
         if (err) {
-            console.log(data.id)
             if (data.id != "" && data.id != undefined) {
                 return res.json({
                     code: 1,
