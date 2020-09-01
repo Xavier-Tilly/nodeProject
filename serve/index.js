@@ -82,7 +82,7 @@ app.post('/upload/img',upload.array('images',2),function(req,res){
    //因为在 app.js文件里面我们已经向外暴漏了存储图片的文件夹
    let url='http://localhost:7221/';
    var data =req.files 
-   let sql=`insert into images_list(url,name) values('${url}${data[0].filename}','${data[0].originalname}');select * from images_list`
+   let sql=`insert into images_list(url,name) values('${url}${data[0].filename}','${data[0].originalname}')`
    db.query(sql,(err,result)=>{
        if(err){
         return res.json({
@@ -90,12 +90,16 @@ app.post('/upload/img',upload.array('images',2),function(req,res){
             msg: "上传失败"
         })
        }else{
+           let obj={
+               url:`${url}${data[0].filename}`,
+               name:`${data[0].filename}`
+           }
         res.json({
-            url:  `${url}${data[0].filename}`,
-            data:data[0],
+            // url:  `${url}${data[0].filename}`,
+            // data:data[0],
             code:200,
             msg:'上传成功',
-            imgList:result[1]
+             imgList:obj
          })
        }
    })

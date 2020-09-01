@@ -65,7 +65,8 @@ export default {
           type: "success",
         });
         //    this.dialogImageUrl = res.url;
-        this.getImgList();
+        // this.getImgList();
+        this.imgList.push(res.imgList)
       } else {
         this.$message({
           message: "上传失败",
