@@ -9,6 +9,7 @@
         :on-remove="handleRemove"
         :on-success="successFun"
         :file-list="imgList"
+        multiple
       >
         <i class="el-icon-plus"></i>
       </el-upload>
@@ -33,11 +34,18 @@ export default {
   },
   methods: {
     handleRemove(file, fileList) {
+      debugger;
+      let id = "";
+      if (file.response) {
+        id = file.response.imgList.id;
+      } else {
+        id = file.id;
+      }
       this.$http({
         url: "/delete/imgList",
         method: "delete",
         data: {
-          id: file.id,
+          id: id,
         },
       }).then((res) => {
         if (res.data.code == 200) {
@@ -52,7 +60,6 @@ export default {
           });
         }
       });
-      console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -64,9 +71,13 @@ export default {
           message: "上传成功",
           type: "success",
         });
-        //    this.dialogImageUrl = res.url;
-        // this.getImgList();
-        this.imgList.push(res.imgList)
+        if (res.imgList.length == 1) {
+          this.imgList.push(res.imgList);
+        } else {
+          for (let i = 0, len = res.imgList.length; i < len; i++) {
+            this.imgList[i].push(res.imgList[i]);
+          }
+        }
       } else {
         this.$message({
           message: "上传失败",

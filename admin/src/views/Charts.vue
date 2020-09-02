@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <ve-line :data="chartData" :settings="chartSetings"></ve-line>
+  <div class="app">
+    <ve-line  height='100%' :data="chartData" :settings="chartSetings"></ve-line>
   </div>
 </template>
 <script>
@@ -38,3 +38,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.app{
+  height: 100%;
+  width: 100%;
+}
+</style>

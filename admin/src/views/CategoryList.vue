@@ -9,6 +9,17 @@
       <el-table-column prop="sex" label="性别"></el-table-column>
       <el-table-column prop="age" label="年龄"></el-table-column>
       <el-table-column prop="date" label="时间"></el-table-column>
+       <el-table-column
+    prop="img"
+    label="头像"
+    sortable
+    width="180">
+ 
+    <!--插入图片链接的代码-->
+    <template slot-scope="scope">
+      <img  :src="scope.row.img" alt="" style="width: 50px;height: 50px">
+    </template>
+  </el-table-column>
       <el-table-column fixed="right" label="操作" width="150">
         <template slot-scope="scope">
           <div class="operator">
@@ -226,6 +237,7 @@ export default {
           pageSize: this.pageSize,
         },
       }).then((res) => {
+        debugger
         this.list = res.data.data;
         this.count = res.data.count;
       });
