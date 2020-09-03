@@ -9,7 +9,7 @@ Vue.use(VueRouter)
     path: '/',
     name: 'Main',
     component: Main,
-    redirect:'/categoryEdit',
+    redirect:'/login',
     children:[{
       path:'/categoryEdit',
       name:'categoryEdit',
@@ -32,6 +32,11 @@ Vue.use(VueRouter)
     }
   ]
   },
+  {
+    path:'/login',
+    name:'login',
+    component:()=>import('../views/Login.vue')
+  }
   // {
   //   path: '/about',
   //   name: 'About',

@@ -6,6 +6,7 @@ const bodyParser = require('body-parser'); //当客户端的请求为post请求�
 const route=require('./routes/admin/index')
 const route2=require('./routes/uploadImage/index')
 const charts=require('./routes/echarts/index')
+const login=require('./routes/login/index')
 var storage=multer.diskStorage({
     destination:function(req,file,cb){
         cb(null,'D:/images/')
@@ -67,6 +68,7 @@ const db = mysql.createPool({//创建连接池连接数据库
 route(app,db)
 route2(app,db,upload)
 charts(app,db)
+login(app,db)
 db.getConnection((err, conn) => {
     if (err) {
         console.log('mysql数据库连接失败');
