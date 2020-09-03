@@ -8,11 +8,16 @@
       <el-form-item label="姓名">
         <el-input v-model="model.name"></el-input>
       </el-form-item>
-      <el-form-item label="性别">
-        <el-input v-model="model.sex"></el-input>
-      </el-form-item>
       <el-form-item label="年龄">
         <el-input v-model="model.age"></el-input>
+      </el-form-item>
+      <el-form-item label="性别">
+        <template>
+          <el-radio-group v-model="radio" @change="handleRadio">
+            <el-radio label="男">男</el-radio>
+            <el-radio label="女">女</el-radio>
+          </el-radio-group>
+        </template>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" native-type="submit">保存</el-button>
@@ -25,12 +30,14 @@ export default {
   data() {
     return {
       model: {},
+      radio: "",
     };
   },
-  created() {
-    console.log(111);
-  },
+
   methods: {
+    handleRadio(value) {
+      this.model.sex=value
+    },
     save() {
       if (this.model.id == "" || this.model.id == undefined) {
         this.$message({
@@ -39,20 +46,20 @@ export default {
         });
         return false;
       }
-      if (this.age != "") {
-        if (parseFloat(this.age).toString() == "NaN") {
+      if (this.model.age != "") {
+        if (parseFloat(this.model.age).toString() == "NaN") {
           this.$message({
             message: "请输入数字",
             type: "error",
           });
-          return false
+          return false;
         }
-      }else{
-           this.$message({
-            message: "年龄不能为空",
-            type: "error",
-          });
-          return false
+      } else {
+        this.$message({
+          message: "年龄不能为空",
+          type: "error",
+        });
+        return false;
       }
       this.$http({
         method: "post",
@@ -65,7 +72,6 @@ export default {
         },
       }).then((res) => {
         console.log(res);
-        debugger;
         if (res.data.code == 200) {
           this.$message({
             message: res.data.msg,
