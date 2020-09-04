@@ -46,8 +46,10 @@ export default {
         });
         return false;
       }
-      if (this.model.age != "") {
-        if (parseFloat(this.model.age).toString() == "NaN") {
+      debugger
+      if (this.model.age) {
+        
+        if (Number(this.model.age).toString() == "NaN") {
           this.$message({
             message: "请输入数字",
             type: "error",
