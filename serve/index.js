@@ -59,8 +59,9 @@ const db = mysql.createPool({//创建连接池连接数据库
     // connectionLimit: 5, //
     // multipleStatements: true // 支持执行多条 sql 语句
     host: 'localhost',
-    user: 'root',
-    password: '88888',
+    user: 'login',
+    port:'3306',
+    password: 'JdHiDEftieyeMMHn',
     database: 'login',
     connectionLimit: 5, //s
     multipleStatements: true // 支持执行多条 sql 语句
