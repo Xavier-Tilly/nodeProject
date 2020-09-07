@@ -20,7 +20,7 @@ function route(app, db) {
                 var isTrue = false;
                 if (err) {
                     res.json({
-                        code: 200,
+                        code: 1,
                         msg: '账号或密码错误',
                     })
                 } else {

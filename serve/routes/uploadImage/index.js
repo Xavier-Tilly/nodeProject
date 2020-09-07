@@ -2,6 +2,7 @@ function route(app,db,upload){
     app.post('/upload/img',upload.array('images',2),function(req,res){
         //因为在 app.js文件里面我们已经向外暴漏了存储图片的文件夹
         let url='http://localhost:7221/';
+        // let url='http://49.235.105.91:7721'
         var data =req.files 
         let sql=`insert into images_list(url,name) values('${url}${data[0].filename}','${data[0].originalname}')`
         db.query(sql,(err,result)=>{

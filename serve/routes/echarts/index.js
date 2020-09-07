@@ -12,5 +12,23 @@ function route(app,db){
             }
         })
     })
+    app.get('/baseInfo',(req,res)=>{
+        let sql=`select * from base_info`;
+        db.query(sql,(err,data)=>{
+            if(err){
+                res.json({
+                    code:1,
+                    data:err
+                })
+                console.log(err)
+            }else{
+                console.log(data[0])
+                res.json({
+                    data:data[0],
+                    code:200
+                })
+            }
+        })
+    })
 }
 module.exports=route;

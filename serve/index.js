@@ -36,34 +36,14 @@ app.all('*', function (req, res, next) {
 app.listen(8081, () => {
     console.log("服务器开启在8081端口。。。");
 })
-// const db = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: '88888',
-//     database: 'login',
-//     multipleStatements: true // 支持执行多条 sql 语句
-// })
-//你这个服务端口是多少
-// db.connect((err) => {
-//     if (err) throw err;
-//     console.log('连接成功')
-// })
 
 const db = mysql.createPool({//创建连接池连接数据库
-    // host: '49.235.105.91',
-    // //这个是数据库端口
-    // port: '3306',
-    // user: 'login',
-    // password: 'mmEkLA8d8kpDXfDA',
-    // database: 'login',
-    // connectionLimit: 5, //
-    // multipleStatements: true // 支持执行多条 sql 语句
-    host: 'localhost',
-    user: 'login',
+    host: '49.235.105.91',
+    user: 'sql_data',
     port:'3306',
-    password: 'JdHiDEftieyeMMHn',
-    database: 'login',
-    connectionLimit: 5, //s
+    password: 'NjyCrxrDD3RwEwZe',
+    database: 'sql_data',
+    connectionLimit: 5, //
     multipleStatements: true // 支持执行多条 sql 语句
 });
 route(app,db)
@@ -72,16 +52,16 @@ charts(app,db)
 login(app,db)
 db.getConnection((err, conn) => {
     if (err) {
-        console.log('mysql数据库连接失败');
+        console.log('mysql数据库连接失败'+err);
     } else {
         console.log('数据库连接成功(连接池)');
-        let sql = `select * from user_list`;
-        conn.query(sql, (err2, res) => {
-            if (err2) {
-                console.log('查询数据库失败')
-            } else {
-                conn.release();
-            }
-        })
+        // let sql = `select * from user_list`;
+        // conn.query(sql, (err2, res) => {
+        //     if (err2) {
+        //         console.log('查询数据库失败')
+        //     } else {
+        //         conn.release();
+        //     }
+        // })
     }
 })
