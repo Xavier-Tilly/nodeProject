@@ -46,7 +46,6 @@ export default {
         });
         return false;
       }
-      debugger
       if (this.model.age) {
         
         if (Number(this.model.age).toString() == "NaN") {
