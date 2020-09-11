@@ -33,9 +33,16 @@ app.all('*', function (req, res, next) {
 });
 
 //这个是服务端口
-app.listen(8081, () => {
+var server=app.listen(8081, () => {
     console.log("服务器开启在8081端口。。。");
 })
+// var io=require('socket.io').listen(server)
+// io.on('connect',socket=>{
+//     socket.emit('open');
+//     socket.on('disconnected',()=>{
+//         console.log('disconnect')
+//     })
+// })
 
 const db = mysql.createPool({//创建连接池连接数据库
     host: '49.235.105.91',

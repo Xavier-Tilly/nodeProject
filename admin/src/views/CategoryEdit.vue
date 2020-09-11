@@ -2,9 +2,9 @@
   <div>
     <h1>新建分类</h1>
     <el-form label-width="120px" @submit.native.prevent="save">
-      <el-form-item label="编号">
+      <!-- <el-form-item label="编号">
         <el-input v-model="model.id"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="姓名">
         <el-input v-model="model.name"></el-input>
       </el-form-item>
@@ -39,13 +39,13 @@ export default {
       this.model.sex=value
     },
     save() {
-      if (this.model.id == "" || this.model.id == undefined) {
-        this.$message({
-          message: "编号不能为空",
-          type: "error",
-        });
-        return false;
-      }
+      // if (this.model.id == "" || this.model.id == undefined) {
+      //   this.$message({
+      //     message: "编号不能为空",
+      //     type: "error",
+      //   });
+      //   return false;
+      // }
       if (this.model.age) {
         
         if (Number(this.model.age).toString() == "NaN") {

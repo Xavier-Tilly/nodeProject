@@ -14,7 +14,7 @@
       highlight-current-row
       :data="list"
       border
-      height="700"
+      height="680"
       style="width:100%"
     >
       <el-table-column type="selection" width="55"></el-table-column>

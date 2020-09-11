@@ -2,7 +2,7 @@ function route(app, db, upload) {
 
     app.post('/addUser', (req, res) => { //用户新增
         let data = req.body;
-        let sql = `insert into user_list(id,name,sex,age,img) values("${data.id}","${data.name}","${data.sex}","${data.age}",'http://localhost:7221/1599028701520-微信图片_20200604120935.png');
+        let sql = `insert into user_list(name,sex,age,img) values("${data.name}","${data.sex}","${data.age}",'http://localhost:7221/1599028701520-微信图片_20200604120935.png');
          select * from user_list where id="${data.id}"`;
         db.query(sql, (err, results) => {
             if (err) {
