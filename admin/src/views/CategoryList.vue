@@ -2,7 +2,7 @@
   <div>
     <h1>分类列表</h1>
     <el-button
-      type="primary"
+      type="danger"
       style="margin-right:20px"
       class="el-icon-delete"
       @click="deleteAll(tableChecked)"
@@ -217,7 +217,6 @@ export default {
     },
     handleClickUpdate(row) {
       //修改
-      debugger
       this.model.id = row.id;
       this.model.name = row.name;
       this.model.sex = row.sex;
@@ -246,6 +245,7 @@ export default {
           });
           this.dialogVisible3 = false;
           this.getList();
+          this.getSearch()
         }
       });
     },

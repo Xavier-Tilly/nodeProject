@@ -33,8 +33,8 @@ app.all('*', function (req, res, next) {
 });
 
 //这个是服务端口
-var server=app.listen(8081, () => {
-    console.log("服务器开启在8081端口。。。");
+app.listen(8082, () => {
+    console.log("服务器开启在8082端口。。。");
 })
 // var io=require('socket.io').listen(server)
 // io.on('connect',socket=>{
@@ -45,11 +45,11 @@ var server=app.listen(8081, () => {
 // })
 
 const db = mysql.createPool({//创建连接池连接数据库
-    host: '49.235.105.91',
-    user: 'sql_data',
+    host: 'localhost',
+    user: 'root',
     port:'3306',
-    password: 'NjyCrxrDD3RwEwZe',
-    database: 'sql_data',
+    password: '88888',
+    database: 'login',
     connectionLimit: 5, //
     multipleStatements: true // 支持执行多条 sql 语句
 });

@@ -5,8 +5,8 @@ import router from './router'
 import VueRouter from 'vue-router'
 import VeLine from 'v-charts/lib/line.common'
 import http from './http'
-import VueSocketio from 'vue-socket.io'
-import socketio from 'socket.io-client'
+// import VueSocketio from 'vue-socket.io'
+// import socketio from 'socket.io-client'
 
 Vue.component(VeLine.name,VeLine)
 
