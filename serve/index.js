@@ -7,6 +7,7 @@ const route=require('./routes/admin/index')
 const route2=require('./routes/uploadImage/index')
 const charts=require('./routes/echarts/index')
 const login=require('./routes/login/index')
+app.set('secret','weqeqr1weqw11qwdqfr')
 var storage=multer.diskStorage({
     destination:function(req,file,cb){
         cb(null,'D:/images/')

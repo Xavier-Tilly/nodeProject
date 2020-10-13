@@ -1,9 +1,13 @@
+const jwt = require('jsonwebtoken')
 function route(app, db) {
     app.post('/login', (req, res) => {
         var userName = req.body.username;
         var pwd = req.body.password;
         console.log(userName)
         console.log(pwd)
+        const token=String(req.headers.authorization||'').split(' ').pop();
+        const tokenData=jwt.verify(token,app.get('secret'))
+        console.log(tokenData)
         if (!userName) {
             res.json({
                 code: 1,
@@ -31,8 +35,13 @@ function route(app, db) {
                         }
                     }
                     if (isTrue) {
+
+                        const token = jwt.sign({
+                            id: result[0].username 
+                        }, app.get('secret'))
                         res.json({
                             code: 200,
+                            token:token,
                             msg: '验证成功'
                         })
                     } else {

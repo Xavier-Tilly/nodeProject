@@ -93,7 +93,7 @@
             <el-input v-model="model.name"></el-input>
           </el-form-item>
           <el-form-item label="年龄">
-            <el-input v-model="model.age"></el-input>
+            <el-input type='number' v-model.trim="model.age"></el-input>
           </el-form-item>
           <el-form-item label="性别">
             <template>

@@ -56,11 +56,13 @@ export default {
           password: this.ruleForm.password,
         },
       }).then((res) => {
+        debugger
         let type = "";
         if (res.data.code == 200) {
           type = "success";
           sessionStorage.setItem("username", this.ruleForm.username);
           sessionStorage.setItem("password", this.ruleForm.password);
+           sessionStorage.setItem("token", res.data.token);
           this.$router.push("/categoryEdit");
         } else {
           type = "error";
