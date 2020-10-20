@@ -56,7 +56,6 @@ export default {
           password: this.ruleForm.password,
         },
       }).then((res) => {
-        debugger
         let type = "";
         if (res.data.code == 200) {
           type = "success";

@@ -1,23 +1,30 @@
 const express = require('express');
 const app = express()
 const mysql = require("mysql");
-const multer=require('multer');
+const multer = require('multer');
+const xlsx = require('xlsx');
+const cors = require('cors')
 const bodyParser = require('body-parser'); //当客户端的请求为post请求时需要通过它去解析客户端传过来的数据
-const route=require('./routes/admin/index')
-const route2=require('./routes/uploadImage/index')
-const charts=require('./routes/echarts/index')
-const login=require('./routes/login/index')
-app.set('secret','weqeqr1weqw11qwdqfr')
-var storage=multer.diskStorage({
-    destination:function(req,file,cb){
-        cb(null,'D:/images/')
+const route = require('./routes/admin/index')
+const route2 = require('./routes/uploadImage/index')
+const charts = require('./routes/echarts/index')
+const login = require('./routes/login/index')
+const uploadExcel=require('./routes/uploadExcel/index')
+const uploadFile = multer({ storage: multer.memoryStorage() })
+app.set('secret', 'weqeqr1weqw11qwdqfr')
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'D:/images/')
     },
-    filename:function(req,file,cb){
-        cb(null,`${Date.now()}-${file.originalname}`)
+    filename: function (req, file, cb) {
+        cb(null, `${Date.now()}-${file.originalname}`)
     }
 })
-var upload=multer({storage:storage});
+var upload = multer({
+    storage: storage
+});
 app.use(bodyParser.json());
+app.use(cors())  // 允许跨域
 app.use(bodyParser.urlencoded({
     extended: true
 })); //中间层对post请求的req进行解析
@@ -37,30 +44,23 @@ app.all('*', function (req, res, next) {
 app.listen(8082, () => {
     console.log("服务器开启在8082端口。。。");
 })
-// var io=require('socket.io').listen(server)
-// io.on('connect',socket=>{
-//     socket.emit('open');
-//     socket.on('disconnected',()=>{
-//         console.log('disconnect')
-//     })
-// })
-
-const db = mysql.createPool({//创建连接池连接数据库
+const db = mysql.createPool({ //创建连接池连接数据库
     host: 'localhost',
     user: 'root',
-    port:'3306',
+    port: '3306',
     password: '88888',
     database: 'login',
     connectionLimit: 5, //
     multipleStatements: true // 支持执行多条 sql 语句
 });
-route(app,db)
-route2(app,db,upload)
-charts(app,db)
-login(app,db)
+route(app, db)
+route2(app, db, upload)
+charts(app, db)
+login(app, db)
+uploadExcel(app,db,uploadFile,xlsx)
 db.getConnection((err, conn) => {
     if (err) {
-        console.log('mysql数据库连接失败'+err);
+        console.log('mysql数据库连接失败' + err);
     } else {
         console.log('数据库连接成功(连接池)');
         // let sql = `select * from user_list`;
